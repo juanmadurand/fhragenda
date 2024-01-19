@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  db:
+    image: postgres:11-alpine
+    container_name: fhr_postgres
+    environment:
+      POSTGRES_DB: fhr
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./localdata:/var/lib/postgresql/data

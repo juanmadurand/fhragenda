@@ -18,9 +18,12 @@ const NavBar = () => {
       {!isLoading && user && <div>Hello {user.name}</div>}
       {!isLoading && !user && <a href="/api/auth/login">Log in</a>}
       {user && (
-        <button type="button" onClick={handleFetchContacts}>
-          Fetch contacts
-        </button>
+        <>
+          <button type="button" onClick={handleFetchContacts}>
+            Fetch contacts
+          </button>
+          <a href="/api/auth/logout">Logout</a>
+        </>
       )}
     </p>
   );

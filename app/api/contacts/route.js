@@ -1,20 +1,16 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
+import { fetchApi } from '../fetcher';
 
 export const GET = withApiAuthRequired(async function contacts(req) {
   try {
     const res = new NextResponse();
     const { accessToken } = await getAccessToken(req, res);
-    const apiPort = process.env.API_PORT || 3001;
-    const response = await fetch(`http://localhost:${apiPort}/api/contacts`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-    const contacts = await response.json();
+    const contacts = await fetchApi('/user/contacts', accessToken);
 
     return NextResponse.json(contacts, res);
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: error.message }, { status: error.status || 500 });
   }
 });
