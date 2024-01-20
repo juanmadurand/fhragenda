@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const router = require('./router');
 
 const {
@@ -24,20 +26,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', router);
-
-// Global error handler outputs json
-app.use((err, req, res) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    error: err.message || 'Unknown error',
-  });
-});
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // For any other route, we return a 404
 app.use((req, res) => {
   res.status(404).json({
     error: 'Not found',
   });
+});
+
+// Global error handler outputs json
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    error: err.message || 'Unknown error',
+  });
+  next();
 });
 
 const server = app.listen(API_PORT, () =>
