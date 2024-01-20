@@ -10,7 +10,7 @@ const client = new Client({
 
 client.connect();
 
-module.exports.query = async (sqlStr, params) => {
+module.exports.query = async (sqlStr, params = null) => {
   try {
     const res = await client.query(sqlStr, params);
     if (process.env.NODE_ENV !== 'production') {
