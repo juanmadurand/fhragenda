@@ -14,7 +14,7 @@ To start the application you need to run:
 npm install
 
 # Set Auth0 secrets provided in the email
-cp .env.example .env.local
+cp .env.example .env
 
 npm run dev
 

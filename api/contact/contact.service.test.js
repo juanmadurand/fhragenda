@@ -1,5 +1,4 @@
-require('dotenv').config({ path: './.env.local' });
-const { query, client } = require('../db');
+const { client } = require('../db');
 const { NotFoundError } = require('../errors');
 const ContactsService = require('./contact.service');
 
@@ -9,30 +8,28 @@ describe('ContactsService', () => {
 
   beforeAll(async () => {
     // Insert a test user and contact for the tests
-    const user = await query(
-      `INSERT INTO users (nickname, name, picture, email, auth_id)
+    const user = await client
+      .query(
+        `INSERT INTO users (nickname, name, picture, email, auth_id)
         VALUES ($1::text, $2::text, $3::text, $4::text, $5::text)
-        RETURNING *`,
-      [
-        'testuser9',
-        'testuser9@test.com',
-        'https://s.gravatar.com/avatar/mock.png',
-        'testuser9@test.com',
-        'testuser|9',
-      ]
-    ).then(({ rows }) => rows[0]);
+        RETURNING id`,
+        ['testuser8', 'testuser8@test.com', '#', 'testuser8@test.com', 'testuser|8']
+      )
+      .then(({ rows }) => rows[0]);
 
     userId = user.id;
 
-    testContact = await query(
-      'INSERT INTO contacts (user_id, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [userId, 'John', 'Doe', 'john.doe@example.com', '123456789']
-    ).then(({ rows }) => rows[0]);
+    testContact = await client
+      .query(
+        'INSERT INTO contacts (user_id, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+        [userId, 'John', 'Doe', 'john.doe@example.com', '123456789']
+      )
+      .then(({ rows }) => rows[0]);
   });
 
   afterAll(async () => {
     // This will cascade to other tables
-    await query('DELETE FROM users WHERE id = $1', [userId]);
+    await client.query('DELETE FROM users WHERE id = $1', [userId]);
     await client.end();
   });
 

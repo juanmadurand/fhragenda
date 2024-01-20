@@ -22,7 +22,7 @@ module.exports.createUser = async function (payload) {
 
   if (!result) {
     console.error('create user failed with params: ', payload);
-    return null;
+    throw new Error('Error creating user');
   }
 
   return result.rows[0];

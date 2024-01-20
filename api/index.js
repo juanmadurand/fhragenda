@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env.local' });
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -16,7 +16,7 @@ const {
 } = process.env;
 
 if (!AUTH0_AUDIENCE || !AUTH0_ISSUER_BASE_URL || !AUTH0_BASE_URL) {
-  throw new Error('Please make sure that the file .env.local is in place and populated');
+  throw new Error('Please make sure that the file .env is in place and populated');
 }
 
 app.use(cors({ origin: AUTH0_BASE_URL })); // allows requests from frontend
