@@ -10,6 +10,7 @@ const client = new Client({
 
 client.connect();
 
+module.exports.client = client;
 module.exports.query = async (sqlStr, params = null) => {
   try {
     const res = await client.query(sqlStr, params);

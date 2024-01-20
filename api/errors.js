@@ -22,4 +22,12 @@ class ForbiddenError extends Error {
   }
 }
 
-module.exports = { BadRequestError, UnauthorizedError, ForbiddenError };
+class NotFoundError extends Error {
+  constructor(message = 'NOT FOUND', statusCode = 404) {
+    super(message);
+    this.name = this.constructor.name;
+    this.statusCode = statusCode;
+  }
+}
+
+module.exports = { BadRequestError, UnauthorizedError, ForbiddenError, NotFoundError };

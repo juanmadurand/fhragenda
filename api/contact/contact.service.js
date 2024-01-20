@@ -1,4 +1,5 @@
 const { query } = require('../db');
+const { NotFoundError } = require('../errors');
 
 module.exports.getById = async function (id) {
   const res = await query('SELECT * FROM contacts WHERE id = $1', [id]);
@@ -69,8 +70,8 @@ module.exports.updateById = async function (contact, paramsArr) {
 module.exports.deleteById = async function (id) {
   const res = await query('DELETE FROM contacts WHERE id = $1 RETURNING *', [id]);
 
-  if (!res || res.rowCount === 0) {
-    throw new Error('Failed to delete contact');
+  if (res.rowCount === 0) {
+    throw new NotFoundError();
   }
 
   return res.rows[0];
@@ -78,10 +79,6 @@ module.exports.deleteById = async function (id) {
 
 module.exports.getHistory = async function (id) {
   const res = await query('SELECT * FROM contacts_history WHERE contact_id = $1', [id]);
-
-  if (!res) {
-    throw new Error('Failed to fetch contact history');
-  }
 
   return res.rows;
 };

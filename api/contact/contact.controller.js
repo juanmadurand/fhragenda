@@ -70,7 +70,7 @@ router.delete('/:id', requireOwnership, async (req, res) => {
 });
 
 // Get history
-router.get('/:id/history', async (req, res) => {
+router.get('/:id/history', requireOwnership, async (req, res) => {
   const contact = await ContactsService.getHistory(req.params.id);
 
   res.json(contact);
