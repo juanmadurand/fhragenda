@@ -1,5 +1,5 @@
 import { handleAuth, handleCallback } from '@auth0/nextjs-auth0';
-import { fetchApi } from '../../fetcher';
+import { fetchApi } from '../../proxy';
 
 // On login callback, we get or create user
 const afterCallback = async (req, session) => {
@@ -13,7 +13,7 @@ const afterCallback = async (req, session) => {
 
   try {
     // Get or create user
-    const dbUser = await fetchApi('/user', accessToken, {
+    await fetchApi('/user', accessToken, {
       method: 'POST',
       body: JSON.stringify({
         nickname: user.nickname,
@@ -22,9 +22,6 @@ const afterCallback = async (req, session) => {
         email: user.email,
       }),
     });
-
-    session.user.id = dbUser.id;
-    delete session.refreshToken;
 
     return session;
   } catch (error) {
