@@ -27,13 +27,11 @@ export default function ContactPage({ params }) {
       <Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <ContactAvatar contact={contact} size={60} />
-
           <Typography variant="h5" sx={{ ml: 2 }}>
             {contact.first_name} {contact.last_name}
           </Typography>
         </Box>
         <ContactDetails contact={contact} />
-
         <ContactHistory contact={contact} />
       </Box>
     );

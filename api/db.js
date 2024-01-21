@@ -1,4 +1,9 @@
-const { Client } = require('pg');
+const { Client, types } = require('pg');
+
+// Prevent timezone conversion
+types.setTypeParser(types.builtins.TIMESTAMP, function (val) {
+  return val;
+});
 
 const client = new Client({
   host: process.env.PG_HOST,

@@ -33,6 +33,7 @@ export default function ContactDetails({ contact }) {
             contact={contact}
             onBack={() => {
               mutate(`/api/contact/${contact.id}`);
+              mutate(`/api/contact/${contact.id}/history`);
               setShowEditForm(false);
             }}
           />
