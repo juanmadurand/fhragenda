@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useContacts } from '@/app/utils/hooks';
+import { useSWRConfig } from 'swr';
+import { useRouter } from 'next/navigation';
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,14 +11,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Avatar, Box, IconButton } from '@mui/material';
-
-import { useContacts } from '@/app/utils/hooks';
-import { stringAvatar } from '../utils/ui';
+import { Box, IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { useSWRConfig } from 'swr';
 import { blue, red } from '@mui/material/colors';
-import { useRouter } from 'next/navigation';
+
+import ContactAvatar from './ContactAvatar';
 
 export default function ContactList() {
   const [page, setPage] = useState(0);
@@ -69,32 +70,32 @@ export default function ContactList() {
           <TableBody>
             {contacts
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(row => {
+              .map(contact => {
                 return (
                   <TableRow
                     className="cursor-pointer"
                     hover
                     role="checkbox"
                     tabIndex={-1}
-                    onMouseEnter={() => setHovered(row.id)}
+                    onMouseEnter={() => setHovered(contact.id)}
                     onMouseLeave={() => console.log('out')}
-                    onClick={() => router.push(`/contact/${row.id}`)}
-                    key={row.email}>
+                    onClick={() => router.push(`/contact/${contact.id}`)}
+                    key={contact.email}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar {...stringAvatar(`${row.first_name} ${row.last_name}`)} />
+                        <ContactAvatar contact={contact} />
 
                         <Box sx={{ ml: 2 }}>
-                          {row.first_name} {row.last_name}
+                          {contact.first_name} {contact.last_name}
                         </Box>
                       </Box>
                     </TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{contact.email}</TableCell>
+                    <TableCell>{contact.phone}</TableCell>
                     <TableCell>
                       <Box
                         sx={{
-                          visibility: hoveredId === row.id ? 'visible' : 'hidden',
+                          visibility: hoveredId === contact.id ? 'visible' : 'hidden',
                           display: 'flex',
                           alignItems: 'center',
                         }}>
@@ -103,7 +104,7 @@ export default function ContactList() {
                         </IconButton>
                         <IconButton
                           sx={{ color: red[400] }}
-                          onClick={() => handleDelete(row.id)}>
+                          onClick={() => handleDelete(contact.id)}>
                           <Delete />
                         </IconButton>
                       </Box>

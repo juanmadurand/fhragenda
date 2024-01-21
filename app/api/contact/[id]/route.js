@@ -1,5 +1,5 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
-import { proxy } from '../../proxy';
+import { proxy } from '@/app/api/proxy';
 
 export const GET = withApiAuthRequired(async function contacts(req, { params }) {
   const { id } = params;

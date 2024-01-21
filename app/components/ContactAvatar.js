@@ -1,3 +1,5 @@
+import { Avatar } from '@mui/material';
+
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -18,11 +20,12 @@ function stringToColor(string) {
   return color;
 }
 
-export function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
+export default function ContactAvatar({ contact, size = 40 }) {
+  const name = `${contact.first_name} ${contact.last_name}`;
+  return (
+    <Avatar sx={{ bgcolor: stringToColor(name), width: size, height: size }}>
+      {name.split(' ')[0][0]}
+      {name.split(' ')[1][0]}
+    </Avatar>
+  );
 }

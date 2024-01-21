@@ -7,3 +7,15 @@ export const useContacts = () => {
 
   return { contacts: data?.length ? data : [], error: error || data?.error, isLoading };
 };
+
+export const useContact = id => {
+  const { data, error, isLoading } = useSWR(`/api/contact/${id}`, fetcher);
+
+  return { contact: data, error: error || data?.error, isLoading };
+};
+
+export const useContactHistory = id => {
+  const { data, error, isLoading } = useSWR(`/api/contact/${id}/history`, fetcher);
+
+  return { events: data?.length ? data : [], error: error || data?.error, isLoading };
+};

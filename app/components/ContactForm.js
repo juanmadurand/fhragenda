@@ -1,15 +1,16 @@
-import { Grid, IconButton, Paper, TextField } from '@mui/material';
+import { Grid, IconButton, TextField } from '@mui/material';
 import { useState } from 'react';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { LoadingButton } from '@mui/lab';
 import { useSWRConfig } from 'swr';
 
-function ContactForm({ onBack }) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+function ContactForm({ onBack, contact }) {
+  const isEdition = !!contact;
+  const [firstName, setFirstName] = useState(contact?.first_name || '');
+  const [lastName, setLastName] = useState(contact?.last_name || '');
+  const [email, setEmail] = useState(contact?.email || '');
+  const [phone, setPhone] = useState(contact?.phone || '');
   const [loading, setLoading] = useState(false);
   const { mutate } = useSWRConfig();
 
@@ -17,14 +18,13 @@ function ContactForm({ onBack }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await fetch('/api/contact', {
-        method: 'POST',
+      await fetch('/api/contact' + (isEdition ? `/${contact.id}` : ''), {
+        method: isEdition ? 'PUT' : 'POST',
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
           email,
           phone,
-          test_bro: 123,
         }),
       });
 
@@ -37,10 +37,12 @@ function ContactForm({ onBack }) {
   };
 
   return (
-    <Paper component="form" sx={{ maxWidth: 680, p: 2 }} onSubmit={handleSubmit}>
-      <IconButton onClick={onBack} aria-label="back">
-        <ArrowBackIosIcon />
-      </IconButton>
+    <form onSubmit={handleSubmit}>
+      {!isEdition && (
+        <IconButton onClick={onBack} aria-label="back">
+          <ArrowBackIosIcon />
+        </IconButton>
+      )}
       <Grid container spacing={2}>
         <Grid item sm={6} xs={12}>
           <TextField
@@ -92,11 +94,13 @@ function ContactForm({ onBack }) {
           type="submit"
           variant="contained"
           color="primary"
-          loading={loading}>
-          Add Contact
+          loading={loading}
+          sx={{ mt: 2 }}
+          fullWidth>
+          {isEdition ? 'Edit' : 'Add'} Contact
         </LoadingButton>
       </Grid>
-    </Paper>
+    </form>
   );
 }
 
