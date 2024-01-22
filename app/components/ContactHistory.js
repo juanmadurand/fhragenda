@@ -1,7 +1,7 @@
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import { Box, Chip, Paper, Tooltip, Typography } from '@mui/material';
 import { useContactHistory } from '../utils/hooks';
-import { grey, indigo } from '@mui/material/colors';
+import { grey, teal } from '@mui/material/colors';
 import moment from 'moment';
 
 export default function ContactHistory({ contact }) {
@@ -12,9 +12,9 @@ export default function ContactHistory({ contact }) {
   }
 
   return (
-    <Paper square={false} sx={{ mt: 2, py: 1, px: 2, backgroundColor: indigo[50] }}>
-      <Typography variant="h6">
-        <CalendarTodayIcon />
+    <Paper square={false} sx={{ mt: 2, py: 1, px: 2, backgroundColor: teal[50] }}>
+      <Typography sx={{ display: 'flex', alignItems: 'center' }} variant="h6">
+        <EventRepeatIcon sx={{ mr: 1 }} />
         Contact History
       </Typography>
       {events.map(h => (
