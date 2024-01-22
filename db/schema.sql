@@ -37,3 +37,20 @@ CREATE TABLE contacts_history (
     new_value VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO contacts_history (contact_id, field, old_value, new_value)
+VALUES
+  (1, 'first_name', 'John', 'Johnny'),
+  (1, 'last_name', 'Doe', 'Doeman'),
+  (1, 'email', 'john.doe@example.com', 'johnny.d@example.com'),
+  (1, 'phone', '123-456-7890', '987-654-3210'),
+
+  (2, 'first_name', 'Jane', 'Janet'),
+  (2, 'last_name', 'Smith', 'Smithson'),
+  (2, 'email', 'jane.smith@example.com', 'janet.smith@example.com'),
+  (2, 'phone', '987-654-3210', '555-123-4567'),
+
+  (3, 'first_name', 'Alice', 'Alicia'),
+  (3, 'last_name', 'Johnson', 'Johnsonson'),
+  (3, 'email', 'alice.johnson@example.com', 'alicia.j@example.com'),
+  (3, 'phone', '555-123-4567', '123-456-7890');

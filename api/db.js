@@ -15,6 +15,12 @@ const client = new Client({
 
 client.connect();
 
+process.on('SIGINT', async () => {
+  console.log('Received SIGINT. Closing PostgreSQL connection...');
+  await client.end();
+  process.exit();
+});
+
 module.exports.client = client;
 module.exports.query = async (sqlStr, params = null) => {
   try {

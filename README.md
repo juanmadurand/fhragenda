@@ -16,6 +16,9 @@ npm install
 # Set Auth0 secrets provided in the email
 cp .env.example .env
 
+# Starts postgresql and populate db
+docker-compose up
+
 npm run dev
 
 ```
