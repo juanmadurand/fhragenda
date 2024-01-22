@@ -37,7 +37,7 @@ function ContactForm({ onBack, contact }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form data-cy="contact-form" onSubmit={handleSubmit}>
       {!isEdition && (
         <IconButton onClick={onBack} aria-label="back">
           <ArrowBackIosIcon />
@@ -50,6 +50,7 @@ function ContactForm({ onBack, contact }) {
             variant="outlined"
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
+            data-cy="input_first_name"
             fullWidth
             required
           />
@@ -60,6 +61,7 @@ function ContactForm({ onBack, contact }) {
             variant="outlined"
             value={lastName}
             onChange={e => setLastName(e.target.value)}
+            data-cy="input_last_name"
             fullWidth
             required
           />
@@ -72,6 +74,7 @@ function ContactForm({ onBack, contact }) {
             variant="outlined"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            data-cy="input_email"
             fullWidth
             required
           />
@@ -83,6 +86,7 @@ function ContactForm({ onBack, contact }) {
             variant="outlined"
             value={phone}
             onChange={e => setPhone(e.target.value)}
+            data-cy="input_phone"
             fullWidth
             required
             autoComplete="off"
@@ -96,6 +100,7 @@ function ContactForm({ onBack, contact }) {
           color="primary"
           loading={loading}
           sx={{ mt: 2 }}
+          data-cy="form_submit"
           fullWidth>
           {isEdition ? 'Edit' : 'Add'} Contact
         </LoadingButton>

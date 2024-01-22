@@ -23,6 +23,12 @@ CREATE TABLE contacts (
     UNIQUE (user_id, email)
 );
 
+INSERT INTO contacts (user_id, first_name, last_name, email, phone)
+VALUES
+  (1, 'John', 'Doe', 'john.doe@example.com', '123-456-7890'),
+  (1, 'Jane', 'Smith', 'jane.smith@example.com', '987-654-3210'),
+  (1, 'Alice', 'Johnson', 'alice.johnson@example.com', '555-123-4567');
+
 CREATE TABLE contacts_history (
     id SERIAL PRIMARY KEY,
     contact_id INTEGER REFERENCES contacts(id) ON DELETE CASCADE,
