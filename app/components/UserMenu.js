@@ -4,6 +4,7 @@ import React from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
 import ContactsIcon from '@mui/icons-material/Contacts';
+
 const UserMenu = ({ onCreate }) => {
   const { user, isLoading } = useUser();
 
@@ -22,12 +23,23 @@ const UserMenu = ({ onCreate }) => {
 
     return (
       <Paper sx={{ p: 2 }}>
-        <Typography className="flex-center" variant="h6" gutterBottom>
-          <ContactsIcon />
+        <Typography
+          sx={{ display: 'flex', alignItems: 'center' }}
+          variant="h6"
+          gutterBottom>
+          <ContactsIcon sx={{ mr: 1 }} />
           Contacts
         </Typography>
-        <Box>Hello {user.name}</Box>
-        <Button onClick={onCreate}>Create contact</Button>
+        <Box>Hello {user.nickname}</Box>
+        <Button
+          variant="contained"
+          size="sm"
+          sx={{ my: 2 }}
+          onClick={onCreate}
+          data-cy="contact-create"
+          fullWidth>
+          Create contact
+        </Button>
         <Button href="/api/auth/logout" variant="outlined">
           Logout
         </Button>

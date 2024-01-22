@@ -8,23 +8,17 @@ import { indigo } from '@mui/material/colors';
 import ContactForm from './ContactForm';
 import { useSWRConfig } from 'swr';
 
-const ContactField = ({ icon, children }) => {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <Box
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      sx={{ my: 1, display: 'flex', alignItems: 'center' }}>
-      {icon}
-      <Box sx={{ ml: 2 }}>{children}</Box>
-      {hovered && 'hv'}
-    </Box>
-  );
-};
+const ContactField = ({ icon, children }) => (
+  <Box sx={{ my: 1, display: 'flex', alignItems: 'center' }}>
+    {icon}
+    <Box sx={{ ml: 2 }}>{children}</Box>
+  </Box>
+);
 
 export default function ContactDetails({ contact }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const { mutate } = useSWRConfig();
+
   const renderBody = () => {
     if (showEditForm) {
       return (
@@ -51,8 +45,12 @@ export default function ContactDetails({ contact }) {
         <ContactField icon={<BadgeIcon />}>
           {contact.first_name} {contact.last_name}
         </ContactField>
-        <ContactField icon={<EmailIcon />}>{contact.email}</ContactField>
-        <ContactField icon={<PhoneIcon />}>{contact.phone}</ContactField>
+        <ContactField icon={<EmailIcon />}>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        </ContactField>
+        <ContactField icon={<PhoneIcon />}>
+          <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+        </ContactField>
 
         <IconButton
           sx={{ position: 'absolute', right: 10, top: 10 }}

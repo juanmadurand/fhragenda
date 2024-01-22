@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mui/material';
 import useSWR from 'swr';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
@@ -9,9 +10,11 @@ export const useContacts = () => {
 };
 
 export const useContact = id => {
-  const { data, error, isLoading } = useSWR(`/api/contact/${id}`, fetcher);
+  const { data, error: errorMsg, isLoading } = useSWR(`/api/contact/${id}`, fetcher);
 
-  return { contact: data, error: error || data?.error, isLoading };
+  const error = errorMsg || data?.error;
+
+  return { contact: !error && data, error, isLoading };
 };
 
 export const useContactHistory = id => {
@@ -19,3 +22,5 @@ export const useContactHistory = id => {
 
   return { events: data?.length ? data : [], error: error || data?.error, isLoading };
 };
+
+export const useIsMobile = () => useMediaQuery('(max-width:600px)');

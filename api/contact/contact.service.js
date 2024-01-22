@@ -78,7 +78,10 @@ module.exports.deleteById = async function (id) {
 };
 
 module.exports.getHistory = async function (id) {
-  const res = await query('SELECT * FROM contacts_history WHERE contact_id = $1', [id]);
+  const res = await query(
+    'SELECT * FROM contacts_history WHERE contact_id = $1 ORDER BY created_at DESC',
+    [id]
+  );
 
   return res.rows;
 };

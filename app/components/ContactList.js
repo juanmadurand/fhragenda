@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useContacts } from '@/app/utils/hooks';
+import { useContacts, useIsMobile } from '@/app/utils/hooks';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/navigation';
 
@@ -12,8 +12,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Box, IconButton } from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
-import { blue, red } from '@mui/material/colors';
+import { Delete, Print } from '@mui/icons-material';
+import { red } from '@mui/material/colors';
 
 import ContactAvatar from './ContactAvatar';
 
@@ -23,14 +23,21 @@ export default function ContactList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { contacts, isLoading, error } = useContacts();
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const { mutate } = useSWRConfig();
 
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
-  const handleDelete = async id => {
-    // setLoading(true);
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+
+    // TODO: Replace with a modal
+    if (!window.confirm('Are you sure?')) {
+      return;
+    }
+
     try {
       await fetch(`/api/contact/${id}`, {
         method: 'DELETE',
@@ -39,7 +46,6 @@ export default function ContactList() {
       mutate('/api/contacts');
     } catch (err) {
       console.log('err', err);
-      // setLoading(false);
     }
   };
 
@@ -58,16 +64,29 @@ export default function ContactList() {
         <Table
           onMouseLeave={() => setHovered(null)}
           stickyHeader
+          data-cy="contacts-table"
           aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell style={{ minWidth: 170 }}>Name</TableCell>
               <TableCell style={{ minWidth: 170 }}>Email</TableCell>
               <TableCell style={{ minWidth: 170 }}>Phone</TableCell>
-              <TableCell style={{ width: 100 }}>Actions</TableCell>
+              <TableCell style={{ width: 100 }}>
+                <IconButton onClick={() => window.print()}>
+                  <Print />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
+            {contacts.length === 0 && (
+              <TableRow>
+                <TableCell data-cy="contacts-empty" colSpan={4}>
+                  No contacts yet
+                </TableCell>{' '}
+              </TableRow>
+            )}
+
             {contacts
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(contact => {
@@ -80,6 +99,7 @@ export default function ContactList() {
                     onMouseEnter={() => setHovered(contact.id)}
                     onMouseLeave={() => console.log('out')}
                     onClick={() => router.push(`/contact/${contact.id}`)}
+                    data-cy="contact-row"
                     key={contact.email}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -95,16 +115,15 @@ export default function ContactList() {
                     <TableCell>
                       <Box
                         sx={{
-                          visibility: hoveredId === contact.id ? 'visible' : 'hidden',
+                          visibility:
+                            isMobile || hoveredId === contact.id ? 'visible' : 'hidden',
                           display: 'flex',
                           alignItems: 'center',
                         }}>
-                        <IconButton sx={{ color: blue[400] }}>
-                          <Edit />
-                        </IconButton>
                         <IconButton
                           sx={{ color: red[400] }}
-                          onClick={() => handleDelete(contact.id)}>
+                          onClick={e => handleDelete(e, contact.id)}
+                          data-cy="contact-delete">
                           <Delete />
                         </IconButton>
                       </Box>
